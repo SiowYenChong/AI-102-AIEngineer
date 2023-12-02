@@ -11,6 +11,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.AI.TextAnalytics" Version="5.0.0" />
+    <PackageReference Include="Azure.Identity" Version="1.5.0" />
+    <PackageReference Include="Microsoft.Azure.Management.Fluent" Version="1.38.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

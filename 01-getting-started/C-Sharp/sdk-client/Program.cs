@@ -1,5 +1,6 @@
-﻿using System;
-using Azure;
+﻿using Azure;
+using System;
+using Microsoft.Azure.Management.Fluent;
 using Microsoft.Extensions.Configuration;
 using System.Text;
 using Azure.AI.TextAnalytics;
