@@ -6,6 +6,8 @@ using System.Text;
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
+using Microsoft.CognitiveServices.Speech;
+using Microsoft.CognitiveServices.Speech.Audio;
 
 namespace translate_text
 {
