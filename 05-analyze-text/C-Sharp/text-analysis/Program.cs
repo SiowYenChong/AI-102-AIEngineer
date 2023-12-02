@@ -4,7 +4,8 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 
 // Import namespaces
-
+using Azure;
+using Azure.AI.TextAnalytics;
 
 namespace text_analysis
 {
@@ -12,6 +13,7 @@ namespace text_analysis
     {
         static void Main(string[] args)
         {
+            Console.OutputEncoding = Encoding.UTF8;
             try
             {
                 // Get config settings from AppSettings
@@ -20,8 +22,10 @@ namespace text_analysis
                 string cogSvcEndpoint = configuration["CognitiveServicesEndpoint"];
                 string cogSvcKey = configuration["CognitiveServiceKey"];
 
-                // Create client using endpoint and key
-
+                // Create client using endpoint and key -- exam ques
+                AzureKeyCredential credentials = new AzureKeyCredential(cogSvcKey);
+                Uri endpoint = new Uri(cogSvcEndpoint);
+                TextAnalyticsClient CogClient = new TextAnalyticsClient(endpoint, credentials);
 
                 // Analyze each text file in the reviews folder
                 var folderPath = Path.GetFullPath("./reviews");  
@@ -36,19 +40,41 @@ namespace text_analysis
                     Console.WriteLine("\n" + text);
 
                     // Get language
+                    //Detect language method - CogClient
+                    DetectedLanguage detectedLanguage = CogClient.DetectLanguage(text);
+                    Console.WriteLine("\nLanguage: " + detectedLanguage.Name);
 
-
-                    // Get sentiment
-
+                    // Get sentiment (Positive/ Negative)
+                    DocumentSentiment documentSentiment = CogClient.AnalyzeSentiment(text);
+                    Console.WriteLine("\nSentiment: " + documentSentiment.Sentiment);
 
                     // Get key phrases
+                    KeyPhraseCollection phrases = CogClient.ExtractKeyPhrases(text);
+                    if(phrases.Count > 0){
+                        Console.WriteLine("\nKey Phrases:");
+                        foreach(string phrase in phrases){
+                            Console.WriteLine("\t"+phrase);
+                        }
+                    }
 
 
                     // Get entities
-
+                    CategorizedEntityCollection entities = CogClient.RecognizeEntities(text);
+                    if(entities.Count > 0){
+                        Console.WriteLine("\nEntities:");
+                        foreach(CategorizedEntity entity in entities){
+                            Console.WriteLine("\t"+entity.Text + " (" + entity.Category + ")");
+                        }
+                    }
 
                     // Get linked entities
-
+                    LinkedEntityCollection linkedEntities = CogClient.RecognizeLinkedEntities(text);
+                    if(linkedEntities.Count > 0){
+                        Console.WriteLine("\nLinked Entities:");
+                        foreach(LinkedEntity linkedEntity in linkedEntities){
+                             Console.WriteLine($"\t{linkedEntity.Name} ({linkedEntity.Url})");
+                        }
+                    }
 
                 }
             }
