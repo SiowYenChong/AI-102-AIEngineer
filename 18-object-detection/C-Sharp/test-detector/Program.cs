@@ -8,12 +8,10 @@ namespace test_detector
 {
     class Program
     {
-
         static CustomVisionPredictionClient prediction_client;
 
         static void Main(string[] args)
         {
-
             try
             {
                 // Get Configuration Settings
